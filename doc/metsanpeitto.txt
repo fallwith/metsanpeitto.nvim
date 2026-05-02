@@ -1,0 +1,96 @@
+*metsanpeitto.txt*           A cozy, low-contrast Neovim colorscheme
+
+==============================================================================
+CONTENTS                                              *metsanpeitto-contents*
+
+  1. Introduction ..................... |metsanpeitto-introduction|
+  2. Requirements ..................... |metsanpeitto-requirements|
+  3. Installation ..................... |metsanpeitto-installation|
+  4. Usage ............................ |metsanpeitto-usage|
+  5. Lualine .......................... |metsanpeitto-lualine|
+  6. Palette .......................... |metsanpeitto-palette|
+  7. Credits .......................... |metsanpeitto-credits|
+
+==============================================================================
+1. INTRODUCTION                                   *metsanpeitto-introduction*
+
+`metsanpeitto` (Finnish for the forest's spell that hides wanderers in
+familiar woods) is a dark Neovim colorscheme that blends the ink-blue
+backgrounds of kanagawa-wave with the cream foreground of atomic, the
+mossy syntax of everforest, the slate comments of juliana, and the
+restraint of nordfox. The signature is cream-on-ink-blue contrast,
+supported by muted, never-neon accents.
+
+==============================================================================
+2. REQUIREMENTS                                   *metsanpeitto-requirements*
+
+  - Neovim 0.9 or newer
+  - `termguicolors` enabled (the colorscheme sets this for you)
+  - A 'true color' capable terminal
+
+==============================================================================
+3. INSTALLATION                                   *metsanpeitto-installation*
+
+Using `vim.pack` (Neovim 0.12+): >lua
+
+    vim.pack.add({ 'https://github.com/fallwith/metsanpeitto.nvim' })
+<
+Using `lazy.nvim`: >lua
+
+    { 'fallwith/metsanpeitto.nvim', lazy = false, priority = 1000 }
+<
+Using `packer.nvim`: >lua
+
+    use 'fallwith/metsanpeitto.nvim'
+<
+==============================================================================
+4. USAGE                                                 *metsanpeitto-usage*
+
+Set the colorscheme: >vim
+
+    :colorscheme metsanpeitto
+<
+Or in your `init.lua`: >lua
+
+    vim.cmd.colorscheme('metsanpeitto')
+<
+You can also call the loader directly: >lua
+
+    require('metsanpeitto').load()
+<
+Access the palette table for use in other plugins: >lua
+
+    local palette = require('metsanpeitto').palette()
+    print(palette.amber) -- '#e5b86a'
+<
+==============================================================================
+5. LUALINE                                             *metsanpeitto-lualine*
+
+A `lualine.nvim` theme is included: >lua
+
+    require('lualine').setup({
+      options = { theme = 'metsanpeitto' },
+    })
+<
+==============================================================================
+6. PALETTE                                             *metsanpeitto-palette*
+
+See `palette.md` in the repository root for a full color reference.
+The palette is exposed via `require('metsanpeitto').palette()`.
+
+==============================================================================
+7. CREDITS                                             *metsanpeitto-credits*
+
+Inspired by:
+  - everforest      https://github.com/sainnhe/everforest
+  - kanagawa.nvim   https://github.com/rebelot/kanagawa.nvim
+  - atomic.nvim     https://github.com/gerardbm/atomic.nvim
+  - juliana.nvim    https://github.com/dgtlcmd/juliana.nvim
+  - nightfox.nvim   https://github.com/EdenEast/nightfox.nvim (nordfox)
+  - lytmode.nvim    https://github.com/sktan/lytmode.nvim
+
+The name riffs on the Finnish lineage that traces back to Tove Jansson
+(Moomins). Snufkin -- the wandering, free-spirited character -- would
+know `metsanpeitto` well.
+
+ vim:tw=78:ts=8:ft=help:norl:
