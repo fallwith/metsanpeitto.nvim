@@ -7,19 +7,26 @@ CONTENTS                                              *metsanpeitto-contents*
   2. Requirements ..................... |metsanpeitto-requirements|
   3. Installation ..................... |metsanpeitto-installation|
   4. Usage ............................ |metsanpeitto-usage|
-  5. Lualine .......................... |metsanpeitto-lualine|
-  6. Palette .......................... |metsanpeitto-palette|
-  7. Credits .......................... |metsanpeitto-credits|
+  5. Variants ......................... |metsanpeitto-variants|
+  6. Configuration .................... |metsanpeitto-configuration|
+  7. Lualine .......................... |metsanpeitto-lualine|
+  8. Palette .......................... |metsanpeitto-palette|
+  9. Credits .......................... |metsanpeitto-credits|
 
 ==============================================================================
 1. INTRODUCTION                                   *metsanpeitto-introduction*
 
 `metsanpeitto` (Finnish for the forest's spell that hides wanderers in
-familiar woods) is a dark Neovim colorscheme that blends the ink-blue
+familiar woods) is a Neovim colorscheme that blends the ink-blue
 backgrounds of kanagawa-wave with the cream foreground of atomic, the
 mossy syntax of everforest, the slate comments of juliana, and the
 restraint of nordfox. The signature is cream-on-ink-blue contrast,
 supported by muted, never-neon accents.
+
+It ships four palette variants -- `tihea` (default dark), `aukea` (light),
+`syksy` (autumn dark), and `sumu` (fog dark) -- which share the same
+structural roles but evoke different forest moods. See
+|metsanpeitto-variants| for details.
 
 ==============================================================================
 2. REQUIREMENTS                                   *metsanpeitto-requirements*
@@ -54,32 +61,106 @@ Or in your `init.lua`: >lua
 
     vim.cmd.colorscheme('metsanpeitto')
 <
+The bare `metsanpeitto` name resolves a variant based on `vim.o.background`:
+`light` selects `aukea`, otherwise `tihea`. To pick a specific variant
+directly, use its full name -- for example: >vim
+
+    :colorscheme metsanpeitto-syksy
+    :colorscheme metsanpeitto-sumu
+<
 You can also call the loader directly: >lua
 
-    require('metsanpeitto').load()
+    require('metsanpeitto').load()           -- auto-resolves variant
+    require('metsanpeitto').load('sumu')     -- explicit variant
 <
 Access the palette table for use in other plugins: >lua
 
     local palette = require('metsanpeitto').palette()
-    print(palette.amber) -- '#e5b86a'
+    print(palette.amber) -- e.g. '#e5b86a' for tihea
 <
 ==============================================================================
-5. LUALINE                                             *metsanpeitto-lualine*
+5. VARIANTS                                           *metsanpeitto-variants*
 
-A `lualine.nvim` theme is included: >lua
+`metsanpeitto` ships four variants. Each preserves the woodblock-pastel
+identity but shifts the bg, fg, and accent palette to evoke a different
+forest mood. ASCII-only variant keys are intentional; the proper Finnish
+diacritics live here in the prose.
+
+`tihea` ("tiheä", dense)                       *metsanpeitto-variant-tihea*
+    Default dark. Cool ink-blue background (`#1d2230`) with cream
+    foreground (`#f5ecd7`). The signature.
+    Entry point: `:colorscheme metsanpeitto-tihea`
+
+`aukea` ("aukea", clearing)                    *metsanpeitto-variant-aukea*
+    Light variant. Warm parchment background (`#f4ead2`) with deep slate
+    foreground. Accents pushed darker for contrast on light bg. Selected
+    automatically when `vim.o.background == 'light'`.
+    Entry point: `:colorscheme metsanpeitto-aukea`
+
+`syksy` ("syksy", autumn)                      *metsanpeitto-variant-syksy*
+    Warm dark variant. Brown-violet background (`#2a2425`) with honey
+    cream foreground. Strings shift to autumn-leaf olive, blues
+    desaturate, reds and ambers warm toward rust and ember. "Same theme,
+    different season."
+    Entry point: `:colorscheme metsanpeitto-syksy`
+
+`sumu` ("sumu", fog)                            *metsanpeitto-variant-sumu*
+    Desaturated dark variant. Neutral slate background (`#272c34`) with
+    cooled cream foreground. Every accent loses ~20-25% saturation so
+    the woodblock pastels feel diffused, like seen through morning mist.
+    Designed for long daily-use sessions.
+    Entry point: `:colorscheme metsanpeitto-sumu`
+
+==============================================================================
+6. CONFIGURATION                                 *metsanpeitto-configuration*
+
+The default variant resolution can be overridden via `setup()`: >lua
+
+    require('metsanpeitto').setup({
+      variant = 'sumu', -- 'tihea' | 'aukea' | 'syksy' | 'sumu'
+    })
+    vim.cmd.colorscheme('metsanpeitto')
+<
+With this configured, `:colorscheme metsanpeitto` will use `sumu` instead
+of resolving from `vim.o.background`. Specific-variant entry points like
+`:colorscheme metsanpeitto-syksy` always select that variant explicitly,
+ignoring `setup` config.
+
+If `setup()` is not called, the variant is auto-resolved from
+`vim.o.background` (`light` -> `aukea`, otherwise `tihea`).
+
+==============================================================================
+7. LUALINE                                             *metsanpeitto-lualine*
+
+A `lualine.nvim` theme is included for each variant. The bare
+`metsanpeitto` theme follows whichever variant is currently active: >lua
 
     require('lualine').setup({
       options = { theme = 'metsanpeitto' },
     })
 <
-==============================================================================
-6. PALETTE                                             *metsanpeitto-palette*
+To pin lualine to a specific variant regardless of the active colorscheme: >lua
 
-See `palette.md` in the repository root for a full color reference.
-The palette is exposed via `require('metsanpeitto').palette()`.
-
+    require('lualine').setup({
+      options = { theme = 'metsanpeitto-sumu' },
+    })
+<
 ==============================================================================
-7. CREDITS                                             *metsanpeitto-credits*
+8. PALETTE                                             *metsanpeitto-palette*
+
+See `palette.md` in the repository root for the full color reference,
+including a side-by-side comparison of all four variants.
+
+The currently active palette is exposed via: >lua
+
+    local palette = require('metsanpeitto').palette()
+<
+A specific variant's palette can be fetched directly: >lua
+
+    local syksy = require('metsanpeitto.palette').get('syksy')
+<
+==============================================================================
+9. CREDITS                                             *metsanpeitto-credits*
 
 Inspired by:
   - everforest      https://github.com/sainnhe/everforest

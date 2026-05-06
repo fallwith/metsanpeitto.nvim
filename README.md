@@ -4,8 +4,6 @@ A cozy, low-contrast Neovim colorscheme. Cream foreground on ink-blue
 background, with woodblock-pastel accents. Designed to be easy on the
 eyes for long sessions.
 
-![metsanpeitto colorscheme screenshot](./screenshot.png)
-
 The name is the Finnish folklore concept of *metsänpeitto* -- the
 forest's spell that hides wanderers in familiar woods. The romanization
 drops the diaeresis to keep the name ASCII-clean.
@@ -20,6 +18,20 @@ The palette distills the parts I liked most from a half-dozen schemes:
 - **juliana** -- slate comment tone, balanced UI chrome
 - **nordfox** -- frost-blue discipline for types
 - **lytmode** -- minimalist UI accents
+
+## Variants
+
+Four variants share the metsanpeitto identity but evoke different forest
+moods.
+
+|   |   |
+| :---: | :---: |
+| ![tihea](./screenshots/tihea.png) <br> **tihea** — *"tiheä"* (dense) <br> Default dark; cool ink-blue, mossy <br> `:colorscheme metsanpeitto-tihea` | ![aukea](./screenshots/aukea.png) <br> **aukea** — *"aukea"* (clearing) <br> Light; warm parchment, deeper accents <br> `:colorscheme metsanpeitto-aukea` |
+| ![syksy](./screenshots/syksy.png) <br> **syksy** — *"syksy"* (autumn) <br> Warm dark; autumn at twilight <br> `:colorscheme metsanpeitto-syksy` | ![sumu](./screenshots/sumu.png) <br> **sumu** — *"sumu"* (fog) <br> Soft dark; desaturated, mist <br> `:colorscheme metsanpeitto-sumu` |
+
+The bare `:colorscheme metsanpeitto` resolves a variant from
+`vim.o.background` (`light` selects `aukea`, otherwise `tihea`). See
+[`palette.md`](./palette.md) for the full color reference per variant.
 
 ## Requirements
 
@@ -49,25 +61,44 @@ use 'fallwith/metsanpeitto.nvim'
 
 ## Usage
 
+Auto-resolve from `vim.o.background`:
+
 ```vim
 :colorscheme metsanpeitto
+```
+
+Pick a specific variant:
+
+```vim
+:colorscheme metsanpeitto-syksy
 ```
 
 Or in Lua:
 
 ```lua
+vim.cmd.colorscheme('metsanpeitto-sumu')
+```
+
+## Configuration
+
+Override the default variant resolution via `setup()`:
+
+```lua
+require('metsanpeitto').setup({
+  variant = 'sumu', -- 'tihea' | 'aukea' | 'syksy' | 'sumu'
+})
 vim.cmd.colorscheme('metsanpeitto')
 ```
 
-Access the palette table for use elsewhere:
-
-```lua
-local palette = require('metsanpeitto').palette()
-```
+`setup()` is optional. If omitted, `:colorscheme metsanpeitto` falls back
+to the `vim.o.background`-driven default. Specific-variant entry points
+like `:colorscheme metsanpeitto-syksy` always select that variant
+explicitly, ignoring `setup` config.
 
 ## Lualine
 
-A `lualine.nvim` theme is included:
+A `lualine.nvim` theme is included for each variant. The bare
+`metsanpeitto` theme tracks whichever variant is currently active:
 
 ```lua
 require('lualine').setup({
@@ -75,11 +106,29 @@ require('lualine').setup({
 })
 ```
 
+To pin lualine to a specific variant regardless of the active colorscheme:
+
+```lua
+require('lualine').setup({
+  options = { theme = 'metsanpeitto-sumu' },
+})
+```
+
 ## Palette
 
-See [`palette.md`](./palette.md) for the full color reference.
+See [`palette.md`](./palette.md) for the full color reference, including
+a side-by-side comparison of all four variants.
 
-Highlights:
+The currently active palette can be accessed at runtime:
+
+```lua
+local palette = require('metsanpeitto').palette()
+
+-- or fetch a specific variant directly:
+local syksy = require('metsanpeitto.palette').get('syksy')
+```
+
+Default tihea highlights:
 
 - `#1d2230` ink-blue background
 - `#f5ecd7` cream foreground

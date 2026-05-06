@@ -1,0 +1,1 @@
+require('metsanpeitto').load('aukea')
